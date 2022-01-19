@@ -15,6 +15,37 @@ export type Scalars = {
   Float: number;
 };
 
+export type Car = {
+  __typename?: 'Car';
+  E_condition: Scalars['String'];
+  car_id: Scalars['Int'];
+  chasis: Scalars['String'];
+  driver: Driver;
+  driverId: Scalars['Float'];
+  engineSupplier: Scalars['String'];
+  front: Scalars['String'];
+  isActiveCar: Scalars['Boolean'];
+  rear: Scalars['String'];
+};
+
+export type CarResponse = {
+  __typename?: 'CarResponse';
+  car?: Maybe<Car>;
+  errors?: Maybe<Array<FError>>;
+};
+
+export type ConditionResponse = {
+  __typename?: 'ConditionResponse';
+  condition?: Maybe<Array<ConditonType>>;
+  errors?: Maybe<Array<FError>>;
+};
+
+export type ConditonType = {
+  __typename?: 'ConditonType';
+  condition: EngineParts;
+  part: Scalars['String'];
+};
+
 export type Contract = {
   __typename?: 'Contract';
   contract_id: Scalars['Int'];
@@ -54,6 +85,13 @@ export type Driver = {
   status: Scalars['String'];
 };
 
+/** Age of the parts in the car */
+export enum EngineParts {
+  New = 'NEW',
+  Old = 'OLD',
+  Used = 'USED'
+}
+
 export type FError = {
   __typename?: 'FError';
   field: Scalars['String'];
@@ -66,13 +104,21 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type Mechanic = {
+  __typename?: 'Mechanic';
+  Mname: Scalars['String'];
+  mech_id: Scalars['Int'];
+  part: Scalars['Int'];
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createContract: ContractResponse;
   deleteUser: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
-  newDriver: Driver;
+  newDriver: CarResponse;
+  newSponsor: SponsorResponse;
   register: UserResponse;
   updateUser?: Maybe<Login>;
 };
@@ -94,6 +140,18 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationNewDriverArgs = {
+  driver_id: Scalars['Int'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationNewSponsorArgs = {
+  carId?: InputMaybe<Scalars['Int']>;
+  options: SponsorInput;
+};
+
+
 export type MutationRegisterArgs = {
   options: UsernamePasswordInput;
 };
@@ -105,18 +163,73 @@ export type MutationUpdateUserArgs = {
   uname: Scalars['String'];
 };
 
+/** values for part inquiry on car */
+export enum PartType {
+  Chasis = 'CHASIS',
+  Engine = 'ENGINE',
+  Front = 'FRONT',
+  Rear = 'REAR'
+}
+
 export type Query = {
   __typename?: 'Query';
+  carCondition: ConditionResponse;
   drivers: Array<Driver>;
   hello: Scalars['String'];
   me?: Maybe<Login>;
+  mechanics: MechanicResponse;
+  myDrivers: Array<Driver>;
+  sponsors: Array<Revenue>;
   users: Array<Login>;
+};
+
+
+export type QueryCarConditionArgs = {
+  carId: Scalars['Int'];
+  part: PartType;
 };
 
 
 export type QueryDriversArgs = {
   cursor?: InputMaybe<Scalars['Int']>;
   limit: Scalars['Int'];
+};
+
+
+export type QueryMechanicsArgs = {
+  carId: Scalars['Int'];
+};
+
+
+export type QuerySponsorsArgs = {
+  carId: Scalars['Int'];
+};
+
+/** this is the revenue type for the sponsor */
+export enum RType {
+  Other = 'OTHER',
+  Partner = 'PARTNER',
+  Title = 'TITLE'
+}
+
+export type Revenue = {
+  __typename?: 'Revenue';
+  duration: Scalars['String'];
+  r_id: Scalars['Int'];
+  type: Scalars['String'];
+  value: Scalars['Int'];
+};
+
+export type SponsorInput = {
+  duration: Scalars['String'];
+  type: RType;
+  value: Scalars['Int'];
+};
+
+export type SponsorResponse = {
+  __typename?: 'SponsorResponse';
+  errors?: Maybe<Array<FError>>;
+  revenue?: Maybe<Revenue>;
 };
 
 export type TypeField = {
@@ -142,13 +255,19 @@ export type Login = {
   uname: Scalars['String'];
 };
 
+export type MechanicResponse = {
+  __typename?: 'mechanicResponse';
+  errors?: Maybe<Array<FError>>;
+  mechanic: Array<Mechanic>;
+};
+
 export type CreateContractMutationVariables = Exact<{
   typeId?: InputMaybe<Scalars['Int']>;
   options: Contractdetails;
 }>;
 
 
-export type CreateContractMutation = { __typename?: 'Mutation', createContract: { __typename?: 'ContractResponse', contract?: { __typename?: 'Contract', contract_id: number, duration: string, status: boolean, type: string, value: number } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined, TypeContract?: Array<{ __typename?: 'TypeField', message: string, type: string }> | null | undefined } };
+export type CreateContractMutation = { __typename?: 'Mutation', createContract: { __typename?: 'ContractResponse', contract?: { __typename?: 'Contract', contract_id: number, duration: string, status: boolean, type: string, value: number } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -171,6 +290,19 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'login', id: number, uname: string } | null | undefined } };
 
+export type MyDriversQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyDriversQuery = { __typename?: 'Query', myDrivers: Array<{ __typename?: 'Driver', Dname: string, Dage: number, pos: number, driver_id: number, status: string }> };
+
+export type CarConditionQueryVariables = Exact<{
+  part: PartType;
+  carId: Scalars['Int'];
+}>;
+
+
+export type CarConditionQuery = { __typename?: 'Query', carCondition: { __typename?: 'ConditionResponse', condition?: Array<{ __typename?: 'ConditonType', condition: EngineParts, part: string }> | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
 export type DriversQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: InputMaybe<Scalars['Int']>;
@@ -183,6 +315,13 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'login', id: number, uname: string } | null | undefined };
+
+export type CarMechanicsQueryVariables = Exact<{
+  carId: Scalars['Int'];
+}>;
+
+
+export type CarMechanicsQuery = { __typename?: 'Query', mechanics: { __typename?: 'mechanicResponse', mechanic: Array<{ __typename?: 'Mechanic', mech_id: number, Mname: string, part: number }>, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
 
 export const CreateContractDocument = gql`
@@ -198,10 +337,6 @@ export const CreateContractDocument = gql`
     errors {
       field
       message
-    }
-    TypeContract {
-      message
-      type
     }
   }
 }
@@ -255,6 +390,39 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const MyDriversDocument = gql`
+    query MyDrivers {
+  myDrivers {
+    Dname
+    Dage
+    pos
+    driver_id
+    status
+  }
+}
+    `;
+
+export function useMyDriversQuery(options: Omit<Urql.UseQueryArgs<MyDriversQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyDriversQuery>({ query: MyDriversDocument, ...options });
+};
+export const CarConditionDocument = gql`
+    query CarCondition($part: PartType!, $carId: Int!) {
+  carCondition(part: $part, carId: $carId) {
+    condition {
+      condition
+      part
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useCarConditionQuery(options: Omit<Urql.UseQueryArgs<CarConditionQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CarConditionQuery>({ query: CarConditionDocument, ...options });
+};
 export const DriversDocument = gql`
     query Drivers($limit: Int!, $cursor: Int) {
   drivers(limit: $limit, cursor: $cursor) {
@@ -281,4 +449,23 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const CarMechanicsDocument = gql`
+    query carMechanics($carId: Int!) {
+  mechanics(carId: $carId) {
+    mechanic {
+      mech_id
+      Mname
+      part
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useCarMechanicsQuery(options: Omit<Urql.UseQueryArgs<CarMechanicsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CarMechanicsQuery>({ query: CarMechanicsDocument, ...options });
 };

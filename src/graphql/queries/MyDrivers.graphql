@@ -1,0 +1,9 @@
+query MyDrivers{
+  myDrivers {
+    Dname,
+    Dage,
+    pos,
+    driver_id,
+    status
+  }
+}

@@ -3,16 +3,20 @@ import {withUrqlClient} from 'next-urql';
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { Layout } from "../components/Layout";
 import NextLink from 'next/link';
-import {Box, Flex, Heading, Link, Stack, Text} from '@chakra-ui/react'
+import {Box, Flex, Heading, Link, Stack, Text, Button} from '@chakra-ui/react'
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useDriversQuery } from "../generated/graphql";
 
 const Index = () => {
-    const [{data}] = useDriversQuery({
+    const [{data, fetching}] = useDriversQuery({
         variables:{
             limit: 5
         }
     });
+
+    if(!fetching && !data){
+        return <div> No drivers found</div>
+    }
     return (
     <Layout>
         <>
@@ -29,17 +33,17 @@ const Index = () => {
         
         
         <br/>
-        <NextLink href='/create-contract'>
+        <NextLink href='/myteam'>
             <Link >
                 Team Management <ExternalLinkIcon mx='2px'/>
             </Link>
         </NextLink>
             <br/>
-            {!data? (
+            {!data  && fetching? (
                 <div>loading...</div>
             ):(
                 <Stack>
-                    {data.drivers.map((d) => ( 
+                    {data!.drivers.map((d) => ( 
                        <>
                        
                         <Box key = {d.driver_id} p={5} shadow='md' borderWidth='1px' >
@@ -57,8 +61,15 @@ const Index = () => {
                 </Stack> 
 
             )}
+            {data ? (
+                <Flex>
+                    <Button isLoading = {fetching} m="auto" my={8}>
+                        Load more
+                    </Button>
+                </Flex>
+            ): null}
             
-            <div>hello world</div>
+            
         
         </>
     </Layout>

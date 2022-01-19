@@ -1,0 +1,12 @@
+query CarCondition($part: PartType!, $carId: Int!){
+  carCondition(part: $part, carId: $carId) {
+    condition {
+      condition,
+      part
+    },
+    errors {
+      field,
+      message
+    }
+  }
+}

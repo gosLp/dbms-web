@@ -1,0 +1,13 @@
+query carMechanics($carId: Int!){
+  mechanics(carId: $carId) {
+    mechanic {
+      mech_id,
+      Mname,
+      part
+    },
+    errors {
+      field,
+      message
+    }
+  }
+}
