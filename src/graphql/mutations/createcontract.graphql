@@ -1,0 +1,13 @@
+mutation CreateContract($typeId: Int, $options: Contractdetails! ){createContract(typeId: $typeId, options: $options) {
+  contract {
+    contract_id,
+    duration,
+    status,
+    type,
+    value
+  },
+  errors {
+    field,
+    message
+  }
+}}

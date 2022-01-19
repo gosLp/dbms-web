@@ -1,0 +1,9 @@
+query Drivers($limit: Int!, $cursor: Int){
+  drivers(limit: $limit,cursor: $cursor) {
+    Dage,
+    Dname,
+    driver_id,
+    pos,
+    status
+  }
+}
