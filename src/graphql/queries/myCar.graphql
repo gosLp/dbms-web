@@ -1,0 +1,12 @@
+query myCar($myCarId: Int!){
+  myCar(id: $myCarId) {
+    car_id,
+    chasis,
+    driverId,
+    E_condition,
+    engineSupplier,
+    front,
+    isActiveCar,
+    rear
+  }
+}

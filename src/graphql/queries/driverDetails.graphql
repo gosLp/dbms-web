@@ -1,0 +1,29 @@
+query DriverDetails($myDetailsId: Int!){
+  myDetails(id: $myDetailsId) {
+    contract {
+      contract_id,
+      duration,
+      status,
+      type,
+      value
+    },
+    driver {
+      Dname,
+      driver_id,
+      Dage,
+      pos,
+      status
+    },
+    engineer {
+      engineer_id,
+      Eage,
+      Ename,
+      engineer_id,
+      status
+    },
+    errors {
+      field,
+      message
+    }
+  }
+}

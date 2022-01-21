@@ -1,0 +1,8 @@
+query MyEngineers{
+  myEngineers {
+    Eage,
+    Ename,
+    engineer_id,
+    status
+  }
+}

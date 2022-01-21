@@ -85,12 +85,46 @@ export type Driver = {
   status: Scalars['String'];
 };
 
+export type DriverDetailsResponse = {
+  __typename?: 'DriverDetailsResponse';
+  contract?: Maybe<Contract>;
+  driver?: Maybe<Driver>;
+  engineer?: Maybe<Engineer>;
+  errors?: Maybe<Array<FError>>;
+};
+
 /** Age of the parts in the car */
 export enum EngineParts {
   New = 'NEW',
   Old = 'OLD',
   Used = 'USED'
 }
+
+export type Engineer = {
+  __typename?: 'Engineer';
+  Eage: Scalars['Int'];
+  Ename: Scalars['String'];
+  engineer_id: Scalars['Int'];
+  status: Scalars['Boolean'];
+};
+
+export type EngineerDetailsResponse = {
+  __typename?: 'EngineerDetailsResponse';
+  contract?: Maybe<Contract>;
+  engineer?: Maybe<Engineer>;
+  errors?: Maybe<Array<FError>>;
+};
+
+export type EngineerInput = {
+  age: Scalars['Int'];
+  name: Scalars['String'];
+};
+
+export type EngineerResponse = {
+  __typename?: 'EngineerResponse';
+  engineer?: Maybe<Engineer>;
+  errors?: Maybe<Array<FError>>;
+};
 
 export type FError = {
   __typename?: 'FError';
@@ -118,6 +152,7 @@ export type Mutation = {
   login: UserResponse;
   logout: Scalars['Boolean'];
   newDriver: CarResponse;
+  newEngineer: EngineerResponse;
   newSponsor: SponsorResponse;
   register: UserResponse;
   updateUser?: Maybe<Login>;
@@ -143,6 +178,11 @@ export type MutationLoginArgs = {
 export type MutationNewDriverArgs = {
   driver_id: Scalars['Int'];
   id: Scalars['Int'];
+};
+
+
+export type MutationNewEngineerArgs = {
+  options: EngineerInput;
 };
 
 
@@ -173,14 +213,30 @@ export enum PartType {
 
 export type Query = {
   __typename?: 'Query';
+  EngineerInfo: EngineerDetailsResponse;
+  Engineers: Array<Engineer>;
   carCondition: ConditionResponse;
   drivers: Array<Driver>;
   hello: Scalars['String'];
   me?: Maybe<Login>;
   mechanics: MechanicResponse;
+  myCar: Array<Car>;
+  myDetails: DriverDetailsResponse;
   myDrivers: Array<Driver>;
+  myEngineers: Array<Engineer>;
   sponsors: Array<Revenue>;
   users: Array<Login>;
+};
+
+
+export type QueryEngineerInfoArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryEngineersArgs = {
+  cursor?: InputMaybe<Scalars['Int']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -198,6 +254,16 @@ export type QueryDriversArgs = {
 
 export type QueryMechanicsArgs = {
   carId: Scalars['Int'];
+};
+
+
+export type QueryMyCarArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryMyDetailsArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -303,6 +369,20 @@ export type CarConditionQueryVariables = Exact<{
 
 export type CarConditionQuery = { __typename?: 'Query', carCondition: { __typename?: 'ConditionResponse', condition?: Array<{ __typename?: 'ConditonType', condition: EngineParts, part: string }> | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
+export type CarMechanicsQueryVariables = Exact<{
+  carId: Scalars['Int'];
+}>;
+
+
+export type CarMechanicsQuery = { __typename?: 'Query', mechanics: { __typename?: 'mechanicResponse', mechanic: Array<{ __typename?: 'Mechanic', mech_id: number, Mname: string, part: number }>, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
+export type DriverDetailsQueryVariables = Exact<{
+  myDetailsId: Scalars['Int'];
+}>;
+
+
+export type DriverDetailsQuery = { __typename?: 'Query', myDetails: { __typename?: 'DriverDetailsResponse', contract?: { __typename?: 'Contract', contract_id: number, duration: string, status: boolean, type: string, value: number } | null | undefined, driver?: { __typename?: 'Driver', Dname: string, driver_id: number, Dage: number, pos: number, status: string } | null | undefined, engineer?: { __typename?: 'Engineer', engineer_id: number, Eage: number, Ename: string, status: boolean } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
 export type DriversQueryVariables = Exact<{
   limit: Scalars['Int'];
   cursor?: InputMaybe<Scalars['Int']>;
@@ -316,12 +396,17 @@ export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'login', id: number, uname: string } | null | undefined };
 
-export type CarMechanicsQueryVariables = Exact<{
-  carId: Scalars['Int'];
+export type MyCarQueryVariables = Exact<{
+  myCarId: Scalars['Int'];
 }>;
 
 
-export type CarMechanicsQuery = { __typename?: 'Query', mechanics: { __typename?: 'mechanicResponse', mechanic: Array<{ __typename?: 'Mechanic', mech_id: number, Mname: string, part: number }>, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+export type MyCarQuery = { __typename?: 'Query', myCar: Array<{ __typename?: 'Car', car_id: number, chasis: string, driverId: number, E_condition: string, engineSupplier: string, front: string, isActiveCar: boolean, rear: string }> };
+
+export type MyEngineersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyEngineersQuery = { __typename?: 'Query', myEngineers: Array<{ __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean }> };
 
 
 export const CreateContractDocument = gql`
@@ -423,6 +508,60 @@ export const CarConditionDocument = gql`
 export function useCarConditionQuery(options: Omit<Urql.UseQueryArgs<CarConditionQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<CarConditionQuery>({ query: CarConditionDocument, ...options });
 };
+export const CarMechanicsDocument = gql`
+    query carMechanics($carId: Int!) {
+  mechanics(carId: $carId) {
+    mechanic {
+      mech_id
+      Mname
+      part
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useCarMechanicsQuery(options: Omit<Urql.UseQueryArgs<CarMechanicsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<CarMechanicsQuery>({ query: CarMechanicsDocument, ...options });
+};
+export const DriverDetailsDocument = gql`
+    query DriverDetails($myDetailsId: Int!) {
+  myDetails(id: $myDetailsId) {
+    contract {
+      contract_id
+      duration
+      status
+      type
+      value
+    }
+    driver {
+      Dname
+      driver_id
+      Dage
+      pos
+      status
+    }
+    engineer {
+      engineer_id
+      Eage
+      Ename
+      engineer_id
+      status
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useDriverDetailsQuery(options: Omit<Urql.UseQueryArgs<DriverDetailsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<DriverDetailsQuery>({ query: DriverDetailsDocument, ...options });
+};
 export const DriversDocument = gql`
     query Drivers($limit: Int!, $cursor: Int) {
   drivers(limit: $limit, cursor: $cursor) {
@@ -450,22 +589,35 @@ export const MeDocument = gql`
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
-export const CarMechanicsDocument = gql`
-    query carMechanics($carId: Int!) {
-  mechanics(carId: $carId) {
-    mechanic {
-      mech_id
-      Mname
-      part
-    }
-    errors {
-      field
-      message
-    }
+export const MyCarDocument = gql`
+    query myCar($myCarId: Int!) {
+  myCar(id: $myCarId) {
+    car_id
+    chasis
+    driverId
+    E_condition
+    engineSupplier
+    front
+    isActiveCar
+    rear
   }
 }
     `;
 
-export function useCarMechanicsQuery(options: Omit<Urql.UseQueryArgs<CarMechanicsQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<CarMechanicsQuery>({ query: CarMechanicsDocument, ...options });
+export function useMyCarQuery(options: Omit<Urql.UseQueryArgs<MyCarQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyCarQuery>({ query: MyCarDocument, ...options });
+};
+export const MyEngineersDocument = gql`
+    query MyEngineers {
+  myEngineers {
+    Eage
+    Ename
+    engineer_id
+    status
+  }
+}
+    `;
+
+export function useMyEngineersQuery(options: Omit<Urql.UseQueryArgs<MyEngineersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyEngineersQuery>({ query: MyEngineersDocument, ...options });
 };

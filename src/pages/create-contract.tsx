@@ -59,7 +59,7 @@ export enum ContractType {
                         <Box mt={4}>
                         <FormControl>
                           <FormLabel htmlFor="type"> Type</FormLabel>
-                          <Field as= "select" name = 'type' variant = 'filled' placeholder = {ContractType.Driver}>
+                          <Field  as= "select" name = 'type' variant = 'filled' placeholder = {ContractType.Driver}>
                             <option value={ContractType.Driver}>Driver Contract</option>
                             <option value={ContractType.Engineer}>Engineer Contract</option>
                             <option value={ContractType.Mechanic}>Mechanic Contract</option>
