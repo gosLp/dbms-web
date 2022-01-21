@@ -1,8 +1,8 @@
-import { Box, Flex, Text, Heading, HStack, Stack, Link } from "@chakra-ui/react";
+import { Box,  Text, Heading, HStack,  Link } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
-import React, { useState } from "react";
+import React from "react";
 import { Layout } from "../components/Layout";
-import { useCarMechanicsQuery, useDriversQuery, useMyDriversQuery, useMyEngineersQuery } from "../generated/graphql";
+import {   useMyDriversQuery, useMyEngineersQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from 'next/link'
 import {ExternalLinkIcon} from '@chakra-ui/icons'

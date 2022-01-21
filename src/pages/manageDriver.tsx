@@ -1,34 +1,30 @@
-import { Box, Flex, Text, Heading, HStack, Stack, Link, Select, Button, propNames } from "@chakra-ui/react";
+import { Box,  Text, Heading, HStack, Link, Select, Button } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Layout } from "../components/Layout";
-import { useCarMechanicsQuery, useDriverDetailsQuery,  useDriversQuery, useMyCarQuery, useMyDriversQuery, useMyEngineersQuery, useNewDriverEngineerMutation, useNewDriverMutation } from "../generated/graphql";
+import {  useDriverDetailsQuery,  useMyCarQuery,  useMyEngineersQuery, useNewDriverEngineerMutation  } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from 'next/link'
 import {ExternalLinkIcon} from '@chakra-ui/icons'
 import { useRouter } from "next/router";
-import { InputField } from "../components/InputField";
 import { Form } from "formik";
 interface TeamFieldProps {
    
 }
 
-type EngDriv = {}
+// type EngDriv = {}
 
  const ManageDriver: React.FC<TeamFieldProps> = () => {
     const router = useRouter();
     const {isReady, query} = useRouter();
     console.log(router)
     
-    // const [{data, fetching}] = useDriversDetailsQuery();
     
     
     if(isReady){
         const cur = query.user_id!.toString()
         let engId: number;
-        // const [{data: dData, fetching: dFetching}] = useDriversQuery({
-        //     variables:{limit:1,cursor: parseInt(cur)}
-        // })
+        
         const [{data: carData, fetching: carFetching}] = useMyCarQuery({variables:{myCarId: parseInt(cur)}});
         useEffect(() =>{
             if (carData) {
@@ -37,15 +33,11 @@ type EngDriv = {}
 
 
         },[carData])
-        // const [{data, fetching}] = useDriversDetailsQuery({variables:{myDetailsId: parseInt(cur) }});
+        
         const [{data, fetching}] = useDriverDetailsQuery({variables:{myDetailsId: parseInt(cur)}})
         const [, newEngineer] = useNewDriverEngineerMutation()
         const [{data:eData, fetching:eFetching}] = useMyEngineersQuery();
-        // useEffect(()=>{
-        //     if (ndata) {
-        //         console.log(ndata)
-        //     }
-        // },[ndata])
+        
 
         
         return(

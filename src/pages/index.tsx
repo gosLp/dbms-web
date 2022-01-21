@@ -1,4 +1,4 @@
-import { NavBar } from "../components/NavBar";
+
 import {withUrqlClient} from 'next-urql';
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { Layout } from "../components/Layout";
