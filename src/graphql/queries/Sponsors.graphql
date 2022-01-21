@@ -1,0 +1,8 @@
+query Sponsors($carId: Int!){
+  sponsors(carId: $carId) {
+    duration,
+    r_id,
+    type,
+    value
+  }
+}

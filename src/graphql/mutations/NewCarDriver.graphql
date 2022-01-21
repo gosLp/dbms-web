@@ -1,0 +1,18 @@
+mutation NewDriver($carId: Int!, $driverId: Int!){
+  newDriver(id: $carId,driver_id: $driverId) {
+    car {
+      car_id,
+      chasis,
+      driverId,
+      E_condition,
+      engineSupplier,
+      front,
+      isActiveCar,
+      rear
+    },
+    errors {
+      field,
+      message
+    }
+  }
+}

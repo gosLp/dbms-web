@@ -1,0 +1,14 @@
+mutation($options: SponsorInput!){
+  newSponsor(options: $options) {
+    errors {
+      field,
+      message
+    },
+    revenue {
+      duration,
+      r_id,
+      type,
+      value
+    }
+  }
+}

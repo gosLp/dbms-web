@@ -15,6 +15,8 @@ interface TeamFieldProps {
 
     const [{data, fetching}]  = useMyDriversQuery();
     const [{data:eData,fetching:eFetching}] = useMyEngineersQuery();
+    //Engineers and management left
+    
     const router = useRouter();
     
     // have queries for mechanics, engineers, management
@@ -22,13 +24,13 @@ interface TeamFieldProps {
     return (
         <Layout>
             <br/>
-            
+            <Heading >Banglore Racing Team</Heading>
            { !data  && fetching? (
                 <div>loading...</div>
             ):(
                 <>
-                <Heading >Banglore Racing Team</Heading>
-                <HStack my={8} spacing={8}>
+                <Heading ml="auto" my={4} size="md">Drivers</Heading>
+                <HStack my={4} spacing={8}>
                     
                     {data!.myDrivers.map((d) => (
                         <>
@@ -68,7 +70,7 @@ interface TeamFieldProps {
             ):(
                 <>
                     
-                    <Heading size="md"> Engineers</Heading>
+                    <Heading my={4} size="md"> Engineers</Heading>
 
                     <HStack my={8} spacing={8}>
                         {eData!.myEngineers.map((e)=>(
@@ -85,7 +87,7 @@ interface TeamFieldProps {
                                 <Heading fontSize='xl'>{e.Ename}</Heading>
                                 <NextLink href='/manage'>
                                     <Link ml="auto" onClick={() => 
-                                        router.push({pathname:'/manageDriver', query: {user_id: e.engineer_id }})
+                                        router.push({pathname:'/manageEngineer', query: {user_id: e.engineer_id }})
                                     }>
                                         Manage Engineer <ExternalLinkIcon mx='2px'/>
                         
@@ -102,6 +104,9 @@ interface TeamFieldProps {
                     
                 </>
             )
+
+            }
+            {
 
             }
         </Layout>

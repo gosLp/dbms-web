@@ -1,25 +1,31 @@
-import { Box, Flex, Text, Heading, HStack, Stack, Link } from "@chakra-ui/react";
+import { Box, Flex, Text, Heading, HStack, Stack, Link, Select, Button, propNames } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import React, { useEffect, useState } from "react";
 import { Layout } from "../components/Layout";
-import { useCarMechanicsQuery, useDriverDetailsQuery,  useDriversQuery, useMyCarQuery, useMyDriversQuery, useMyEngineersQuery } from "../generated/graphql";
+import { useCarMechanicsQuery, useDriverDetailsQuery,  useDriversQuery, useMyCarQuery, useMyDriversQuery, useMyEngineersQuery, useNewDriverEngineerMutation, useNewDriverMutation } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from 'next/link'
 import {ExternalLinkIcon} from '@chakra-ui/icons'
 import { useRouter } from "next/router";
+import { InputField } from "../components/InputField";
+import { Form } from "formik";
 interface TeamFieldProps {
-    
+   
 }
+
+type EngDriv = {}
 
  const ManageDriver: React.FC<TeamFieldProps> = () => {
     const router = useRouter();
     const {isReady, query} = useRouter();
     console.log(router)
+    
     // const [{data, fetching}] = useDriversDetailsQuery();
-
+    
+    
     if(isReady){
         const cur = query.user_id!.toString()
-        
+        let engId: number;
         // const [{data: dData, fetching: dFetching}] = useDriversQuery({
         //     variables:{limit:1,cursor: parseInt(cur)}
         // })
@@ -33,6 +39,15 @@ interface TeamFieldProps {
         },[carData])
         // const [{data, fetching}] = useDriversDetailsQuery({variables:{myDetailsId: parseInt(cur) }});
         const [{data, fetching}] = useDriverDetailsQuery({variables:{myDetailsId: parseInt(cur)}})
+        const [, newEngineer] = useNewDriverEngineerMutation()
+        const [{data:eData, fetching:eFetching}] = useMyEngineersQuery();
+        // useEffect(()=>{
+        //     if (ndata) {
+        //         console.log(ndata)
+        //     }
+        // },[ndata])
+
+        
         return(
             <>
              <Layout>
@@ -105,7 +120,30 @@ interface TeamFieldProps {
                         borderRadius='md'>
                         <Heading size ="sm">Engineer Info</Heading>
                             {!data?.myDetails.engineer? (
+                                <>
                                 <div>ENGINEER NOT ASSIGNED</div>
+                                <Form>
+                                <Select  placeholder="Select available Engineers"> { /*value ={}  */}
+                                    {
+                                        eData?(
+                                            eData.myEngineers.map((m)=>(
+                                                <>
+                                                <option value={m.engineer_id} onClick={async ()=>{ 
+                                                    engId = m.engineer_id
+                                                    console.log(engId)
+                                                }}>{m.Ename} Engineer</option>
+
+                                                </>
+                                        ))
+                                        ):(<>
+                                        <div><div className="loading"></div></div>
+                                        </>)
+                                    }
+
+                                </Select>
+                                <Button onSubmit={async ()=>{ await newEngineer({eId:engId,driverId:parseInt(cur)})}} type="submit">submit</Button>
+                                </Form>
+                                </>
                                 ): (
                                     <>
                                     <Text mt={4}> Engineer Name: {data?.myDetails.engineer.Ename}</Text>

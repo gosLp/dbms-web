@@ -10,7 +10,8 @@ import { useDriversQuery } from "../generated/graphql";
 const Index = () => {
     const [{data, fetching}] = useDriversQuery({
         variables:{
-            limit: 5
+            limit: 5,
+            // cursor: 5
         }
     });
 

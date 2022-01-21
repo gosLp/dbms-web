@@ -1,0 +1,14 @@
+mutation newMechanic($carId: Int!, $mname: String!){
+  NewMechanic(carId: $carId, Mname: $mname) {
+    errors {
+      field,
+      message
+    },
+    mechanic {
+      mech_id,
+      Mname,
+      part
+
+    }
+  }
+}

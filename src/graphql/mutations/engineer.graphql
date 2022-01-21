@@ -1,0 +1,14 @@
+mutation Engineer($options: EngineerInput!){
+  newEngineer(options: $options) {
+    engineer {
+      Eage,
+      Ename,
+      engineer_id,
+      status
+    },
+    errors {
+      field,
+      message
+    }
+  }
+}

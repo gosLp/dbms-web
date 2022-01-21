@@ -1,0 +1,10 @@
+query MechInfo($mechId: Int!){
+  MechInfo(mechId: $mechId) {
+    mechanic {
+      mech_id,
+      Mname,
+      part,
+      status
+    }
+  }
+}

@@ -1,0 +1,8 @@
+query Engineers($limit: Int!){
+  Engineers(limit: $limit) {
+    Eage,
+    Ename,
+    engineer_id,
+    status
+  }
+}

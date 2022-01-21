@@ -1,0 +1,7 @@
+mutation newDriverEngineer($eId: Int!, $driverId: Int!){
+  newDriverEngineer(eId: $eId, driverId: $driverId){
+    driver_id,
+    Dname
+
+  }
+}

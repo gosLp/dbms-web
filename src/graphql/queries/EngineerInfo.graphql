@@ -1,0 +1,21 @@
+query EngineerInfo($engineerInfoId: Int!){
+  EngineerInfo(id: $engineerInfoId) {
+    contract {
+      contract_id,
+      duration,
+      status,
+      type,
+      value
+    },
+    engineer {
+      Eage,
+      Ename,
+      engineer_id,
+      status
+    },
+    errors {
+      field,
+      message
+    }
+  }
+}

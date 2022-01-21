@@ -143,19 +143,34 @@ export type Mechanic = {
   Mname: Scalars['String'];
   mech_id: Scalars['Int'];
   part: Scalars['Int'];
+  status: Scalars['Boolean'];
+};
+
+export type MechanicResponse = {
+  __typename?: 'MechanicResponse';
+  errors?: Maybe<Array<FError>>;
+  mechanic?: Maybe<Mechanic>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
+  NewMechanic: MechanicResponse;
   createContract: ContractResponse;
   deleteUser: Scalars['Boolean'];
   login: UserResponse;
   logout: Scalars['Boolean'];
   newDriver: CarResponse;
+  newDriverEngineer: Driver;
   newEngineer: EngineerResponse;
   newSponsor: SponsorResponse;
   register: UserResponse;
   updateUser?: Maybe<Login>;
+};
+
+
+export type MutationNewMechanicArgs = {
+  Mname: Scalars['String'];
+  carId: Scalars['Int'];
 };
 
 
@@ -178,6 +193,12 @@ export type MutationLoginArgs = {
 export type MutationNewDriverArgs = {
   driver_id: Scalars['Int'];
   id: Scalars['Int'];
+};
+
+
+export type MutationNewDriverEngineerArgs = {
+  driverId: Scalars['Int'];
+  eId: Scalars['Int'];
 };
 
 
@@ -215,6 +236,7 @@ export type Query = {
   __typename?: 'Query';
   EngineerInfo: EngineerDetailsResponse;
   Engineers: Array<Engineer>;
+  MechInfo: MechanicResponse;
   carCondition: ConditionResponse;
   drivers: Array<Driver>;
   hello: Scalars['String'];
@@ -224,6 +246,7 @@ export type Query = {
   myDetails: DriverDetailsResponse;
   myDrivers: Array<Driver>;
   myEngineers: Array<Engineer>;
+  myMechanics: Array<Mechanic>;
   sponsors: Array<Revenue>;
   users: Array<Login>;
 };
@@ -237,6 +260,11 @@ export type QueryEngineerInfoArgs = {
 export type QueryEngineersArgs = {
   cursor?: InputMaybe<Scalars['Int']>;
   limit: Scalars['Int'];
+};
+
+
+export type QueryMechInfoArgs = {
+  mechId: Scalars['Int'];
 };
 
 
@@ -327,6 +355,14 @@ export type MechanicResponse = {
   mechanic: Array<Mechanic>;
 };
 
+export type NewDriverMutationVariables = Exact<{
+  carId: Scalars['Int'];
+  driverId: Scalars['Int'];
+}>;
+
+
+export type NewDriverMutation = { __typename?: 'Mutation', newDriver: { __typename?: 'CarResponse', car?: { __typename?: 'Car', car_id: number, chasis: string, driverId: number, E_condition: string, engineSupplier: string, front: string, isActiveCar: boolean, rear: string } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
 export type CreateContractMutationVariables = Exact<{
   typeId?: InputMaybe<Scalars['Int']>;
   options: Contractdetails;
@@ -334,6 +370,13 @@ export type CreateContractMutationVariables = Exact<{
 
 
 export type CreateContractMutation = { __typename?: 'Mutation', createContract: { __typename?: 'ContractResponse', contract?: { __typename?: 'Contract', contract_id: number, duration: string, status: boolean, type: string, value: number } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
+export type EngineerMutationVariables = Exact<{
+  options: EngineerInput;
+}>;
+
+
+export type EngineerMutation = { __typename?: 'Mutation', newEngineer: { __typename?: 'EngineerResponse', engineer?: { __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -348,6 +391,29 @@ export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
+export type NewDriverEngineerMutationVariables = Exact<{
+  eId: Scalars['Int'];
+  driverId: Scalars['Int'];
+}>;
+
+
+export type NewDriverEngineerMutation = { __typename?: 'Mutation', newDriverEngineer: { __typename?: 'Driver', driver_id: number, Dname: string } };
+
+export type NewMechanicMutationVariables = Exact<{
+  carId: Scalars['Int'];
+  mname: Scalars['String'];
+}>;
+
+
+export type NewMechanicMutation = { __typename?: 'Mutation', NewMechanic: { __typename?: 'MechanicResponse', errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined, mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: number } | null | undefined } };
+
+export type Unnamed_1_MutationVariables = Exact<{
+  options: SponsorInput;
+}>;
+
+
+export type Unnamed_1_Mutation = { __typename?: 'Mutation', newSponsor: { __typename?: 'SponsorResponse', errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined, revenue?: { __typename?: 'Revenue', duration: string, r_id: number, type: string, value: number } | null | undefined } };
+
 export type RegisterMutationVariables = Exact<{
   username: Scalars['String'];
   password: Scalars['String'];
@@ -356,10 +422,38 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'login', id: number, uname: string } | null | undefined } };
 
+export type EngineerInfoQueryVariables = Exact<{
+  engineerInfoId: Scalars['Int'];
+}>;
+
+
+export type EngineerInfoQuery = { __typename?: 'Query', EngineerInfo: { __typename?: 'EngineerDetailsResponse', contract?: { __typename?: 'Contract', contract_id: number, duration: string, status: boolean, type: string, value: number } | null | undefined, engineer?: { __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
+export type MechInfoQueryVariables = Exact<{
+  mechId: Scalars['Int'];
+}>;
+
+
+export type MechInfoQuery = { __typename?: 'Query', MechInfo: { __typename?: 'MechanicResponse', mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: number, status: boolean } | null | undefined } };
+
 export type MyDriversQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MyDriversQuery = { __typename?: 'Query', myDrivers: Array<{ __typename?: 'Driver', Dname: string, Dage: number, pos: number, driver_id: number, status: string }> };
+
+export type SponsorsQueryVariables = Exact<{
+  carId: Scalars['Int'];
+}>;
+
+
+export type SponsorsQuery = { __typename?: 'Query', sponsors: Array<{ __typename?: 'Revenue', duration: string, r_id: number, type: string, value: number }> };
+
+export type EngineersQueryVariables = Exact<{
+  limit: Scalars['Int'];
+}>;
+
+
+export type EngineersQuery = { __typename?: 'Query', Engineers: Array<{ __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean }> };
 
 export type CarConditionQueryVariables = Exact<{
   part: PartType;
@@ -409,6 +503,30 @@ export type MyEngineersQueryVariables = Exact<{ [key: string]: never; }>;
 export type MyEngineersQuery = { __typename?: 'Query', myEngineers: Array<{ __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean }> };
 
 
+export const NewDriverDocument = gql`
+    mutation NewDriver($carId: Int!, $driverId: Int!) {
+  newDriver(id: $carId, driver_id: $driverId) {
+    car {
+      car_id
+      chasis
+      driverId
+      E_condition
+      engineSupplier
+      front
+      isActiveCar
+      rear
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useNewDriverMutation() {
+  return Urql.useMutation<NewDriverMutation, NewDriverMutationVariables>(NewDriverDocument);
+};
 export const CreateContractDocument = gql`
     mutation CreateContract($typeId: Int, $options: Contractdetails!) {
   createContract(typeId: $typeId, options: $options) {
@@ -429,6 +547,26 @@ export const CreateContractDocument = gql`
 
 export function useCreateContractMutation() {
   return Urql.useMutation<CreateContractMutation, CreateContractMutationVariables>(CreateContractDocument);
+};
+export const EngineerDocument = gql`
+    mutation Engineer($options: EngineerInput!) {
+  newEngineer(options: $options) {
+    engineer {
+      Eage
+      Ename
+      engineer_id
+      status
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useEngineerMutation() {
+  return Urql.useMutation<EngineerMutation, EngineerMutationVariables>(EngineerDocument);
 };
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
@@ -457,6 +595,57 @@ export const LogoutDocument = gql`
 export function useLogoutMutation() {
   return Urql.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument);
 };
+export const NewDriverEngineerDocument = gql`
+    mutation newDriverEngineer($eId: Int!, $driverId: Int!) {
+  newDriverEngineer(eId: $eId, driverId: $driverId) {
+    driver_id
+    Dname
+  }
+}
+    `;
+
+export function useNewDriverEngineerMutation() {
+  return Urql.useMutation<NewDriverEngineerMutation, NewDriverEngineerMutationVariables>(NewDriverEngineerDocument);
+};
+export const NewMechanicDocument = gql`
+    mutation newMechanic($carId: Int!, $mname: String!) {
+  NewMechanic(carId: $carId, Mname: $mname) {
+    errors {
+      field
+      message
+    }
+    mechanic {
+      mech_id
+      Mname
+      part
+    }
+  }
+}
+    `;
+
+export function useNewMechanicMutation() {
+  return Urql.useMutation<NewMechanicMutation, NewMechanicMutationVariables>(NewMechanicDocument);
+};
+export const Document = gql`
+    mutation ($options: SponsorInput!) {
+  newSponsor(options: $options) {
+    errors {
+      field
+      message
+    }
+    revenue {
+      duration
+      r_id
+      type
+      value
+    }
+  }
+}
+    `;
+
+export function useMutation() {
+  return Urql.useMutation<Mutation, MutationVariables>(Document);
+};
 export const RegisterDocument = gql`
     mutation Register($username: String!, $password: String!) {
   register(options: {username: $username, password: $password}) {
@@ -475,6 +664,49 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const EngineerInfoDocument = gql`
+    query EngineerInfo($engineerInfoId: Int!) {
+  EngineerInfo(id: $engineerInfoId) {
+    contract {
+      contract_id
+      duration
+      status
+      type
+      value
+    }
+    engineer {
+      Eage
+      Ename
+      engineer_id
+      status
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useEngineerInfoQuery(options: Omit<Urql.UseQueryArgs<EngineerInfoQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EngineerInfoQuery>({ query: EngineerInfoDocument, ...options });
+};
+export const MechInfoDocument = gql`
+    query MechInfo($mechId: Int!) {
+  MechInfo(mechId: $mechId) {
+    mechanic {
+      mech_id
+      Mname
+      part
+      status
+    }
+  }
+}
+    `;
+
+export function useMechInfoQuery(options: Omit<Urql.UseQueryArgs<MechInfoQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MechInfoQuery>({ query: MechInfoDocument, ...options });
+};
 export const MyDriversDocument = gql`
     query MyDrivers {
   myDrivers {
@@ -489,6 +721,34 @@ export const MyDriversDocument = gql`
 
 export function useMyDriversQuery(options: Omit<Urql.UseQueryArgs<MyDriversQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MyDriversQuery>({ query: MyDriversDocument, ...options });
+};
+export const SponsorsDocument = gql`
+    query Sponsors($carId: Int!) {
+  sponsors(carId: $carId) {
+    duration
+    r_id
+    type
+    value
+  }
+}
+    `;
+
+export function useSponsorsQuery(options: Omit<Urql.UseQueryArgs<SponsorsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<SponsorsQuery>({ query: SponsorsDocument, ...options });
+};
+export const EngineersDocument = gql`
+    query Engineers($limit: Int!) {
+  Engineers(limit: $limit) {
+    Eage
+    Ename
+    engineer_id
+    status
+  }
+}
+    `;
+
+export function useEngineersQuery(options: Omit<Urql.UseQueryArgs<EngineersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<EngineersQuery>({ query: EngineersDocument, ...options });
 };
 export const CarConditionDocument = gql`
     query CarCondition($part: PartType!, $carId: Int!) {
