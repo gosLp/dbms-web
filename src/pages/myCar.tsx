@@ -3,7 +3,7 @@ import { withUrqlClient } from "next-urql";
 import { useRouter } from "next/router";
 import React from "react";
 import { Layout } from "../components/Layout";
-import { PartType, useCarConditionQuery, useCarMechanicsQuery } from "../generated/graphql";
+import { PartType, useCarConditionQuery, useCarMechanicsQuery, useSponsorsQuery } from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 // import engine from '../public/'
 // sources old engine https://www.formula1.com/content/dam/fom-website/sutton/2018/China/Saturday/dcd1814ap130.jpg.transform/9col/image.jpg
@@ -14,18 +14,17 @@ interface InputFieldProps {
  const myCar: React.FC<InputFieldProps> = () => {
     const router = useRouter();
     const {isReady, query} = useRouter();
-     console.log(router.query);
      if (isReady) {
          const cur = query.carId!.toString();
 
          const [{data:eData,fetching: eFetching}] = useCarConditionQuery({variables:{carId: parseInt(cur), part: PartType.Engine}});
-         console.log(eData?.carCondition.condition);
          const [{data:fData, fetching: fFetching}] = useCarConditionQuery({variables:{carId: parseInt(cur), part: PartType.Front}});
          const [{data:rData,fetching: rFetching}] = useCarConditionQuery({variables:{carId: parseInt(cur), part: PartType.Rear}});
          const [{data:cData,fetching: cFetching}] = useCarConditionQuery({variables:{carId: parseInt(cur), part: PartType.Chasis}});
      
-         const [{data:mData, fetching:mfetching}] = useCarMechanicsQuery({variables:{carId: parseInt(cur)}});
-         console.log("car mechanics are",mData?.mechanics.mechanic)
+         const [{data:sData, fetching:sfetching}] = useSponsorsQuery({variables:{carId: parseInt(cur)}});
+         
+        //  console.log("car mechanics are",mData?.mechanics.mechanic)
 
 
          return(
@@ -106,9 +105,29 @@ interface InputFieldProps {
                     </HStack>
                 </>
                 )}
+                
                 </HStack>
                 <Button ml={300} onClick={()=>{}}>Update Car</Button>
-                <Heading size='lg'>Mechanics For Car no: {cur}</Heading>
+
+
+                <Heading my={4} size='lg'>Sponsors for Car no: {cur}</Heading>
+                { !sData && sfetching?(<>
+                    <div>Loading....</div> 
+                </>):(<>
+                   <HStack>
+                       {sData!.sponsors.map((s) =>(
+                           <Box  p={5}
+                           shadow='md'
+                           borderWidth='1px'
+                           flex='1'
+                           borderRadius='md'>
+                           <Heading fontSize='xl'>{s.type} SPONSORS</Heading>
+                           <Text mt={4}>VALUE : {s.value}</Text>
+                           <Text mt={4}>DURATION : {s.duration}</Text>
+                           </Box>
+                       ))}
+                   </HStack>
+                </>)}
                 
             </Layout>
          )
