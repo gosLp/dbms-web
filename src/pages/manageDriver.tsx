@@ -17,7 +17,7 @@ interface TeamFieldProps {
  const ManageDriver: React.FC<TeamFieldProps> = () => {
     const router = useRouter();
     const {isReady, query} = useRouter();
-    console.log(router)
+
     
     
     
@@ -173,7 +173,7 @@ interface TeamFieldProps {
                             {carData?.myCar.map((c) =>(
                                 <>
                             {/* <Heading>CAR: {c.car_id}</Heading> */}
-                            <Box p={5} as='button' onClick={ () =>{ router.push('/myCar',{query: c.car_id.toString(), pathname: '/myCar' })}}
+                            <Box p={5} as='button' onClick={ () =>{ router.push('/myCar',{pathname:'/myCar', query: {carId: c.car_id }})}}
                             shadow='md'
                             borderWidth='1px'
                             flex='1'

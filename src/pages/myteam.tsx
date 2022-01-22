@@ -24,6 +24,7 @@ interface TeamFieldProps {
     // have queries for mechanics, engineers, management
     data?.myDrivers.map((d)=>{console.log(d)});
     return (
+        
         <Layout>
             <br/>
             <Heading >Banglore Racing Team</Heading>
