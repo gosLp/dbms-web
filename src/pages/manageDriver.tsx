@@ -1,4 +1,4 @@
-import { Box,  Text, Heading, HStack, Link, Select, Button } from "@chakra-ui/react";
+import { Box,  Text, Heading, HStack, Link, Select, Button, FormControl, FormLabel } from "@chakra-ui/react";
 import { withUrqlClient } from "next-urql";
 import React, { useEffect } from "react";
 import { Layout } from "../components/Layout";
@@ -7,7 +7,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from 'next/link'
 import {ExternalLinkIcon} from '@chakra-ui/icons'
 import { useRouter } from "next/router";
-import { Form } from "formik";
+import { Field, Form, Formik } from "formik";
 interface TeamFieldProps {
    
 }
@@ -110,31 +110,47 @@ interface TeamFieldProps {
                         borderWidth='1px'
                         flex='1'
                         borderRadius='md'>
-                        <Heading size ="sm">Engineer Info</Heading>
+                        <Heading size ="md" my={2}>Engineer Info</Heading>
                             {!data?.myDetails.engineer? (
                                 <>
                                 <div>ENGINEER NOT ASSIGNED</div>
-                                <Form>
-                                <Select  placeholder="Select available Engineers"> { /*value ={}  */}
-                                    {
-                                        eData?(
-                                            eData.myEngineers.map((m)=>(
-                                                <>
-                                                <option value={m.engineer_id} onClick={async ()=>{ 
-                                                    engId = m.engineer_id
-                                                    console.log(engId)
-                                                }}>{m.Ename} Engineer</option>
-
-                                                </>
-                                        ))
-                                        ):(<>
-                                        <div><div className="loading"></div></div>
-                                        </>)
+                                <Formik initialValues={{ e_id: eData?.myEngineers[0].engineer_id}} onSubmit={ async (values, seterrors) =>{
+                                    console.log(values);
+                                    if(values.e_id){
+                                        const id = parseInt(values.e_id.toString())
+                                        console.log(typeof(id))
+                                        const eng =await newEngineer({eId:id,driverId: parseInt(cur)});
+                                        console.log(eng)
                                     }
+                                    
+                                    
+                                }}>
+                                    <Form>
+                                    <FormControl>
+                                        <FormLabel m="auto" my={2} htmlFor="e_id">Select Engineer</FormLabel>
+                                        <Field as= "select" name = "e_id" placeholder={0}>
+                                            {
+                                                eData?(
+                                                    eData.myEngineers.map((m)=>(
+                                                        <>
+                                                        <option value={m.engineer_id} >{m.Ename} Engineer</option>  {/* onClick={async ()=>{ engId = m.engineer_id console.log(engId)}} */}
 
-                                </Select>
-                                <Button onSubmit={async ()=>{ await newEngineer({eId:engId,driverId:parseInt(cur)})}} type="submit">submit</Button>
+                                                        </>
+                                                ))
+                                                ):(<>
+                                                <div><div className="loading"></div></div>
+                                                </>)
+                                            }
+                                        </Field>
+                                        {/* <Select  placeholder="Select available Engineers">  */}
+                                            
+
+                                        {/* </Select> */}
+                                <Button ml={4} onSubmit={async ()=>{ await newEngineer({eId:engId,driverId:parseInt(cur)})}} type="submit">submit</Button>
+                                </FormControl>
                                 </Form>
+                                </Formik>
+                                
                                 </>
                                 ): (
                                     <>
@@ -170,8 +186,8 @@ interface TeamFieldProps {
                             flex='1'
                             borderRadius='md'>
                                     <Heading size="xs">Car Details</Heading>
-                                    <Text mt={4}> Engine Supplier{c.engineSupplier}</Text>
-                                    <Text mt={4}> Engine Supplier{c.isActiveCar}</Text>
+                                    <Text mt={4}> Engine Supplier: {c.engineSupplier}</Text>
+                                    <Text mt={4}> Active Car{c.isActiveCar}</Text>
                                     </Box>
                                     <Box p={5}
                             shadow='md'
@@ -179,10 +195,10 @@ interface TeamFieldProps {
                             flex='1'
                             borderRadius='md'>
                                         <Heading size="xs">Car Condition</Heading>
-                                        <Text mt={4}> Engine Condition{c.E_condition}</Text>
-                                        <Text mt={4}> Chasis Conditon{c.chasis}</Text>
-                                        <Text mt={4}> Front Conditon{c.front}</Text>
-                                        <Text mt={4}> Rear Conditon{c.rear}</Text>
+                                        <Text mt={4}> Engine Condition:{c.E_condition}</Text>
+                                        <Text mt={4}> Chasis Conditon: {c.chasis}</Text>
+                                        <Text mt={4}> Front Conditon: {c.front}</Text>
+                                        <Text mt={4}> Rear Conditon: {c.rear}</Text>
                                     </Box>
                                     
                                 </HStack>

@@ -5,7 +5,7 @@ import { Layout } from "../components/Layout";
 import NextLink from 'next/link';
 import {Box, Flex, Heading, Link, Stack, Text, Button} from '@chakra-ui/react'
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { useDriversQuery } from "../generated/graphql";
+import { useDriversQuery, useMyEngineersQuery } from "../generated/graphql";
 
 const Index = () => {
     const [{data, fetching}] = useDriversQuery({
@@ -14,6 +14,9 @@ const Index = () => {
             // cursor: 5
         }
     });
+    const [] = useMyEngineersQuery({variables:{
+        
+    }})
 
     if(!fetching && !data){
         return <div> No drivers found</div>

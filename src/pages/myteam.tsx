@@ -7,6 +7,7 @@ import { createUrqlClient } from "../utils/createUrqlClient";
 import NextLink from 'next/link'
 import {ExternalLinkIcon} from '@chakra-ui/icons'
 import { useRouter } from "next/router";
+import { useIsAuth } from "../utils/useIsAuth";
 interface TeamFieldProps {
     
 }
@@ -17,6 +18,7 @@ interface TeamFieldProps {
     const [{data:eData,fetching:eFetching}] = useMyEngineersQuery();
     //Engineers and management left
     
+    useIsAuth();
     const router = useRouter();
     
     // have queries for mechanics, engineers, management
