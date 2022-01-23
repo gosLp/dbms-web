@@ -261,6 +261,9 @@ export type Query = {
   EngineerInfo: EngineerDetailsResponse;
   Engineers: Array<Engineer>;
   MechInfo: MechanicResponse;
+  allCars: Array<Car>;
+  allManagement: Array<Management>;
+  allSponsors: Array<Revenue>;
   carCondition: CarConditionResponse;
   drivers: Array<Driver>;
   hello: Scalars['String'];
@@ -290,6 +293,24 @@ export type QueryEngineersArgs = {
 
 export type QueryMechInfoArgs = {
   mechId: Scalars['Int'];
+};
+
+
+export type QueryAllCarsArgs = {
+  cursor?: InputMaybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryAllManagementArgs = {
+  cursor?: InputMaybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryAllSponsorsArgs = {
+  cursor?: InputMaybe<Scalars['Int']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -492,12 +513,33 @@ export type SponsorsQueryVariables = Exact<{
 
 export type SponsorsQuery = { __typename?: 'Query', sponsors: Array<{ __typename?: 'Revenue', duration: string, r_id: number, type: string, value: number }> };
 
+export type AllCarsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+}>;
+
+
+export type AllCarsQuery = { __typename?: 'Query', allCars: Array<{ __typename?: 'Car', driverId: number, chasis: string, E_condition: string, engineSupplier: string, front: string, isActiveCar: boolean, rear: string, car_id: number }> };
+
 export type AllEngineersQueryVariables = Exact<{
   limit: Scalars['Int'];
 }>;
 
 
 export type AllEngineersQuery = { __typename?: 'Query', Engineers: Array<{ __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean }> };
+
+export type AllManagementQueryVariables = Exact<{
+  limit: Scalars['Int'];
+}>;
+
+
+export type AllManagementQuery = { __typename?: 'Query', allManagement: Array<{ __typename?: 'Management', m_id: number, name: string, status: boolean, type: MType }> };
+
+export type AllSponsorsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+}>;
+
+
+export type AllSponsorsQuery = { __typename?: 'Query', allSponsors: Array<{ __typename?: 'Revenue', r_id: number, duration: string, type: string, value: number }> };
 
 export type CarConditionQueryVariables = Exact<{
   part: PartType;
@@ -814,6 +856,24 @@ export const SponsorsDocument = gql`
 export function useSponsorsQuery(options: Omit<Urql.UseQueryArgs<SponsorsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<SponsorsQuery>({ query: SponsorsDocument, ...options });
 };
+export const AllCarsDocument = gql`
+    query allCars($limit: Int!) {
+  allCars(limit: $limit) {
+    driverId
+    chasis
+    E_condition
+    engineSupplier
+    front
+    isActiveCar
+    rear
+    car_id
+  }
+}
+    `;
+
+export function useAllCarsQuery(options: Omit<Urql.UseQueryArgs<AllCarsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AllCarsQuery>({ query: AllCarsDocument, ...options });
+};
 export const AllEngineersDocument = gql`
     query allEngineers($limit: Int!) {
   Engineers(limit: $limit) {
@@ -827,6 +887,34 @@ export const AllEngineersDocument = gql`
 
 export function useAllEngineersQuery(options: Omit<Urql.UseQueryArgs<AllEngineersQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<AllEngineersQuery>({ query: AllEngineersDocument, ...options });
+};
+export const AllManagementDocument = gql`
+    query allManagement($limit: Int!) {
+  allManagement(limit: $limit) {
+    m_id
+    name
+    status
+    type
+  }
+}
+    `;
+
+export function useAllManagementQuery(options: Omit<Urql.UseQueryArgs<AllManagementQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AllManagementQuery>({ query: AllManagementDocument, ...options });
+};
+export const AllSponsorsDocument = gql`
+    query allSponsors($limit: Int!) {
+  allSponsors(limit: $limit) {
+    r_id
+    duration
+    type
+    value
+  }
+}
+    `;
+
+export function useAllSponsorsQuery(options: Omit<Urql.UseQueryArgs<AllSponsorsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AllSponsorsQuery>({ query: AllSponsorsDocument, ...options });
 };
 export const CarConditionDocument = gql`
     query CarCondition($part: PartType!, $carId: Int!) {

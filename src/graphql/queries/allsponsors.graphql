@@ -1,0 +1,8 @@
+query allSponsors($limit: Int!){
+  allSponsors(limit: $limit) {
+    r_id,
+    duration,
+    type,
+    value
+  }
+}

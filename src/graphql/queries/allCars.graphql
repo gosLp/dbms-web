@@ -1,0 +1,14 @@
+query allCars($limit: Int!){
+  allCars(limit: $limit) {
+    driverId,
+    chasis,
+    E_condition,
+    engineSupplier,
+    front,
+    isActiveCar,
+    rear
+      
+    ,
+    car_id
+  }
+}

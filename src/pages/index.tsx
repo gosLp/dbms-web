@@ -36,8 +36,34 @@ const Index = () => {
                 Team Management <ExternalLinkIcon mx='2px'/>
             </Link>
         </NextLink>
+            {/* <NextLink href='/management'>
+            <Link >
+                management  <ExternalLinkIcon mx='2px'/>
+            </Link>
+            </NextLink>
+            <NextLink href='/Sponsors'>
+            <Link >
+                Sponsors  <ExternalLinkIcon mx='2px'/>
+            </Link>
+            </NextLink> */}
         </Flex>
-        
+        <Flex>
+        <NextLink href='/management'>
+            <Link >
+                management  <ExternalLinkIcon mx='2px'/>
+            </Link>
+            </NextLink>
+            <NextLink href='/Sponsors'>
+            <Link >
+                Sponsors  <ExternalLinkIcon mx='2px'/>
+            </Link>
+            </NextLink>
+            <NextLink href='/cars'>
+            <Link >
+                AvailableCars  <ExternalLinkIcon mx='2px'/>
+            </Link>
+            </NextLink>
+        </Flex>
         
         <br/>
         
@@ -107,6 +133,8 @@ const Index = () => {
                     </Button>
                 </Flex>
             ): null}
+
+            
             
             
         

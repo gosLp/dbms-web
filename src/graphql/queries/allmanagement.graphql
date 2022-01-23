@@ -1,0 +1,8 @@
+query allManagement($limit: Int!){
+  allManagement(limit: $limit) {
+    m_id,
+    name,
+    status,
+    type
+  }
+}
