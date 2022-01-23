@@ -1,0 +1,12 @@
+mutation assignMechanic($carId: Int!, $mid: Int!) {assignMechanic(carId: $carId, Mid: $mid) {
+  mechanic {
+    mech_id,
+    Mname,
+    part,
+    status
+  },
+  errors {
+    field,
+    message
+  }
+}}

@@ -33,15 +33,16 @@ const Index = () => {
                 </Link>
                 
             </NextLink>
-        </Flex>
-        
-        
-        <br/>
-        <NextLink href='/myteam'>
+            <NextLink href='/myteam'>
             <Link >
                 Team Management <ExternalLinkIcon mx='2px'/>
             </Link>
         </NextLink>
+        </Flex>
+        
+        
+        <br/>
+        
             <br/>
             {!data  && fetching? (
                 <div>loading...</div>

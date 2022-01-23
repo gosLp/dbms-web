@@ -34,12 +34,6 @@ export type CarResponse = {
   errors?: Maybe<Array<FError>>;
 };
 
-export type ConditionResponse = {
-  __typename?: 'ConditionResponse';
-  condition?: Maybe<Array<ConditonType>>;
-  errors?: Maybe<Array<FError>>;
-};
-
 export type ConditonType = {
   __typename?: 'ConditonType';
   condition: EngineParts;
@@ -138,11 +132,26 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+/** Type of management */
+export enum MType {
+  Advisor = 'ADVISOR',
+  Director = 'DIRECTOR',
+  Principle = 'PRINCIPLE'
+}
+
+export type Management = {
+  __typename?: 'Management';
+  m_id: Scalars['Int'];
+  name: Scalars['String'];
+  status: Scalars['Boolean'];
+  type: MType;
+};
+
 export type Mechanic = {
   __typename?: 'Mechanic';
   Mname: Scalars['String'];
   mech_id: Scalars['Int'];
-  part: Scalars['Int'];
+  part: Parts;
   status: Scalars['Boolean'];
 };
 
@@ -155,6 +164,7 @@ export type MechanicResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   NewMechanic: MechanicResponse;
+  assignMechanic: MechanicResponse;
   createContract: ContractResponse;
   deleteUser: Scalars['Boolean'];
   login: UserResponse;
@@ -170,6 +180,12 @@ export type Mutation = {
 
 export type MutationNewMechanicArgs = {
   Mname: Scalars['String'];
+  carId: Scalars['Int'];
+};
+
+
+export type MutationAssignMechanicArgs = {
+  Mid: Scalars['Int'];
   carId: Scalars['Int'];
 };
 
@@ -232,12 +248,20 @@ export enum PartType {
   Rear = 'REAR'
 }
 
+/** Part on which the mechanic works on */
+export enum Parts {
+  Aero = 'AERO',
+  Chasis = 'CHASIS',
+  Crew = 'CREW',
+  Engine = 'ENGINE'
+}
+
 export type Query = {
   __typename?: 'Query';
   EngineerInfo: EngineerDetailsResponse;
   Engineers: Array<Engineer>;
   MechInfo: MechanicResponse;
-  carCondition: ConditionResponse;
+  carCondition: CarConditionResponse;
   drivers: Array<Driver>;
   hello: Scalars['String'];
   me?: Maybe<Login>;
@@ -246,6 +270,7 @@ export type Query = {
   myDetails: DriverDetailsResponse;
   myDrivers: Array<Driver>;
   myEngineers: Array<Engineer>;
+  myManagement: Array<Management>;
   myMechanics: Array<Mechanic>;
   sponsors: Array<Revenue>;
   users: Array<Login>;
@@ -343,6 +368,12 @@ export type UsernamePasswordInput = {
   username: Scalars['String'];
 };
 
+export type CarConditionResponse = {
+  __typename?: 'carConditionResponse';
+  condition?: Maybe<Array<ConditonType>>;
+  errors?: Maybe<Array<FError>>;
+};
+
 export type Login = {
   __typename?: 'login';
   id: Scalars['Int'];
@@ -362,6 +393,14 @@ export type NewDriverMutationVariables = Exact<{
 
 
 export type NewDriverMutation = { __typename?: 'Mutation', newDriver: { __typename?: 'CarResponse', car?: { __typename?: 'Car', car_id: number, chasis: string, driverId: number, E_condition: string, engineSupplier: string, front: string, isActiveCar: boolean, rear: string } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+
+export type AssignMechanicMutationVariables = Exact<{
+  carId: Scalars['Int'];
+  mid: Scalars['Int'];
+}>;
+
+
+export type AssignMechanicMutation = { __typename?: 'Mutation', assignMechanic: { __typename?: 'MechanicResponse', mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: Parts, status: boolean } | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
 export type CreateContractMutationVariables = Exact<{
   typeId?: InputMaybe<Scalars['Int']>;
@@ -405,7 +444,7 @@ export type NewMechanicMutationVariables = Exact<{
 }>;
 
 
-export type NewMechanicMutation = { __typename?: 'Mutation', NewMechanic: { __typename?: 'MechanicResponse', errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined, mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: number } | null | undefined } };
+export type NewMechanicMutation = { __typename?: 'Mutation', NewMechanic: { __typename?: 'MechanicResponse', errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined, mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: Parts } | null | undefined } };
 
 export type Unnamed_1_MutationVariables = Exact<{
   options: SponsorInput;
@@ -422,6 +461,11 @@ export type RegisterMutationVariables = Exact<{
 
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'UserResponse', errors?: Array<{ __typename?: 'FieldError', field: string, message: string }> | null | undefined, user?: { __typename?: 'login', id: number, uname: string } | null | undefined } };
 
+export type ActiveMechanicsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveMechanicsQuery = { __typename?: 'Query', myMechanics: Array<{ __typename?: 'Mechanic', mech_id: number, Mname: string, part: Parts, status: boolean }> };
+
 export type EngineerInfoQueryVariables = Exact<{
   engineerInfoId: Scalars['Int'];
 }>;
@@ -434,7 +478,7 @@ export type MechInfoQueryVariables = Exact<{
 }>;
 
 
-export type MechInfoQuery = { __typename?: 'Query', MechInfo: { __typename?: 'MechanicResponse', mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: number, status: boolean } | null | undefined } };
+export type MechInfoQuery = { __typename?: 'Query', MechInfo: { __typename?: 'MechanicResponse', mechanic?: { __typename?: 'Mechanic', mech_id: number, Mname: string, part: Parts, status: boolean } | null | undefined } };
 
 export type MyDriversQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -461,14 +505,14 @@ export type CarConditionQueryVariables = Exact<{
 }>;
 
 
-export type CarConditionQuery = { __typename?: 'Query', carCondition: { __typename?: 'ConditionResponse', condition?: Array<{ __typename?: 'ConditonType', condition: EngineParts, part: string }> | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+export type CarConditionQuery = { __typename?: 'Query', carCondition: { __typename?: 'carConditionResponse', condition?: Array<{ __typename?: 'ConditonType', condition: EngineParts, part: string }> | null | undefined, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
 export type CarMechanicsQueryVariables = Exact<{
   carId: Scalars['Int'];
 }>;
 
 
-export type CarMechanicsQuery = { __typename?: 'Query', mechanics: { __typename?: 'mechanicResponse', mechanic: Array<{ __typename?: 'Mechanic', mech_id: number, Mname: string, part: number }>, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
+export type CarMechanicsQuery = { __typename?: 'Query', mechanics: { __typename?: 'mechanicResponse', mechanic: Array<{ __typename?: 'Mechanic', mech_id: number, Mname: string, part: Parts }>, errors?: Array<{ __typename?: 'FError', field: string, message: string }> | null | undefined } };
 
 export type DriverDetailsQueryVariables = Exact<{
   myDetailsId: Scalars['Int'];
@@ -526,6 +570,26 @@ export const NewDriverDocument = gql`
 
 export function useNewDriverMutation() {
   return Urql.useMutation<NewDriverMutation, NewDriverMutationVariables>(NewDriverDocument);
+};
+export const AssignMechanicDocument = gql`
+    mutation assignMechanic($carId: Int!, $mid: Int!) {
+  assignMechanic(carId: $carId, Mid: $mid) {
+    mechanic {
+      mech_id
+      Mname
+      part
+      status
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+    `;
+
+export function useAssignMechanicMutation() {
+  return Urql.useMutation<AssignMechanicMutation, AssignMechanicMutationVariables>(AssignMechanicDocument);
 };
 export const CreateContractDocument = gql`
     mutation CreateContract($typeId: Int, $options: Contractdetails!) {
@@ -663,6 +727,20 @@ export const RegisterDocument = gql`
 
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
+};
+export const ActiveMechanicsDocument = gql`
+    query ActiveMechanics {
+  myMechanics {
+    mech_id
+    Mname
+    part
+    status
+  }
+}
+    `;
+
+export function useActiveMechanicsQuery(options: Omit<Urql.UseQueryArgs<ActiveMechanicsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<ActiveMechanicsQuery>({ query: ActiveMechanicsDocument, ...options });
 };
 export const EngineerInfoDocument = gql`
     query EngineerInfo($engineerInfoId: Int!) {

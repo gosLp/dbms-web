@@ -1,0 +1,8 @@
+query ActiveMechanics{
+  myMechanics {
+    mech_id,
+    Mname,
+    part,
+    status
+  }
+}
