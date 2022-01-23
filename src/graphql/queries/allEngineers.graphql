@@ -1,4 +1,4 @@
-query Engineers($limit: Int!){
+query allEngineers($limit: Int!){
   Engineers(limit: $limit) {
     Eage,
     Ename,

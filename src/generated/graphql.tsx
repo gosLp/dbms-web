@@ -492,12 +492,12 @@ export type SponsorsQueryVariables = Exact<{
 
 export type SponsorsQuery = { __typename?: 'Query', sponsors: Array<{ __typename?: 'Revenue', duration: string, r_id: number, type: string, value: number }> };
 
-export type EngineersQueryVariables = Exact<{
+export type AllEngineersQueryVariables = Exact<{
   limit: Scalars['Int'];
 }>;
 
 
-export type EngineersQuery = { __typename?: 'Query', Engineers: Array<{ __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean }> };
+export type AllEngineersQuery = { __typename?: 'Query', Engineers: Array<{ __typename?: 'Engineer', Eage: number, Ename: string, engineer_id: number, status: boolean }> };
 
 export type CarConditionQueryVariables = Exact<{
   part: PartType;
@@ -814,8 +814,8 @@ export const SponsorsDocument = gql`
 export function useSponsorsQuery(options: Omit<Urql.UseQueryArgs<SponsorsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<SponsorsQuery>({ query: SponsorsDocument, ...options });
 };
-export const EngineersDocument = gql`
-    query Engineers($limit: Int!) {
+export const AllEngineersDocument = gql`
+    query allEngineers($limit: Int!) {
   Engineers(limit: $limit) {
     Eage
     Ename
@@ -825,8 +825,8 @@ export const EngineersDocument = gql`
 }
     `;
 
-export function useEngineersQuery(options: Omit<Urql.UseQueryArgs<EngineersQueryVariables>, 'query'> = {}) {
-  return Urql.useQuery<EngineersQuery>({ query: EngineersDocument, ...options });
+export function useAllEngineersQuery(options: Omit<Urql.UseQueryArgs<AllEngineersQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<AllEngineersQuery>({ query: AllEngineersDocument, ...options });
 };
 export const CarConditionDocument = gql`
     query CarCondition($part: PartType!, $carId: Int!) {

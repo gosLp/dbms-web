@@ -5,7 +5,7 @@ import { Layout } from "../components/Layout";
 import NextLink from 'next/link';
 import {Box, Flex, Heading, Link, Stack, Text, Button} from '@chakra-ui/react'
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { useDriversQuery, useMyEngineersQuery } from "../generated/graphql";
+import { useAllEngineersQuery, useDriversQuery } from "../generated/graphql";
 
 const Index = () => {
     const [{data, fetching}] = useDriversQuery({
@@ -14,9 +14,7 @@ const Index = () => {
             // cursor: 5
         }
     });
-    const [] = useMyEngineersQuery({variables:{
-        
-    }})
+    const [{data:eData, fetching: efetching}] = useAllEngineersQuery({variables:{limit: 10}})
 
     if(!fetching && !data){
         return <div> No drivers found</div>
@@ -47,6 +45,8 @@ const Index = () => {
             {!data  && fetching? (
                 <div>loading...</div>
             ):(
+                <>
+                <Heading fontSize='xx-large' p={5} shadow='xs' borderWidth='1px'>All Drivers</Heading>
                 <Stack>
                     {data!.drivers.map((d) => ( 
                        <>
@@ -64,9 +64,43 @@ const Index = () => {
                     
                     )}
                 </Stack> 
-
+                        </>
             )}
             {data ? (
+                <Flex>
+                    <Button isLoading = {fetching} m="auto" my={8}>
+                        Load more
+                    </Button>
+                </Flex>
+            ): null}
+
+            {!eData && efetching?(
+            <>
+                <div>Loading.....</div>
+            </>
+            ):(
+            <>  
+                 <Heading fontSize='xx-large' p={5} shadow='xs' borderWidth='1px'>All Engineers</Heading>
+                <Stack>
+                    {eData!.Engineers.map((e) => ( 
+                       <>
+
+                        <Box key = {e.engineer_id} p={5} shadow='md' borderWidth='1px' >
+                            <Heading fontSize='xl'>{e.Ename}</Heading>
+                            <Text mt={4}>Age: {e.Eage}</Text>
+                            <Text mt={4}>Engineer Number: {e.engineer_id}</Text>
+                            <Text mt={4}>ActiveEngineer: { e.status?"Active":"InActive"}</Text>
+                        </Box>
+                       </>
+                        
+                    
+                    )
+                    
+                    )}
+                </Stack> 
+            </>
+            )}
+            {eData ? (
                 <Flex>
                     <Button isLoading = {fetching} m="auto" my={8}>
                         Load more

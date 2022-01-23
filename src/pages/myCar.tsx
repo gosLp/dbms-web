@@ -40,6 +40,7 @@ interface InputFieldProps {
          const [{data:aData, fetching:afetching}] = useActiveMechanicsQuery();
          const [{data:sData, fetching:sfetching}] = useSponsorsQuery({variables:{carId: parseInt(cur)}});
          const [,newMechanic] = useAssignMechanicMutation();
+         
          console.log("car mechanics are",mData?.mechanics.mechanic)
 
         if (mData?.mechanics.mechanic) {
@@ -148,12 +149,17 @@ interface InputFieldProps {
                     <Heading my={4} size='lg'>Car Mechanics for Car no: {cur}</Heading>
                     
                     {
-                        !mData && mFetching?( 
-                            <>
+                        mData.mechanics.mechanic.length===0?( //mData.mechanics.mechanic ===[] && mFetching
+                            <> 
                             {!aData && afetching?(<>
                                 <div>Loading</div>
                             </>):(
                                 <>
+                                <Box p={5}
+                               shadow='md'
+                               borderWidth='1px'
+                               flex='1'
+                               borderRadius='md' my={4}>
                                 <div>MECHANICS NOT ASSIGNED</div>
                                 <Formik initialValues={{ m_id:aData?.myMechanics[0].mech_id}} onSubmit={ async (values, seterrors) =>{
                                     console.log(values);
@@ -191,11 +197,13 @@ interface InputFieldProps {
                                 </FormControl>
                                 </Form>
                                 </Formik>
+                                </Box>
                                 </>
                             )}
                                 
                             </>
                         ):(<>
+                                <div>wrong condition</div>
                                 <HStack>
                                 {mData!.mechanics.mechanic.map((m) =>(
                                     <Box p={5} shadow='md' borderWidth='1px'
