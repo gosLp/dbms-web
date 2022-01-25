@@ -45,7 +45,7 @@ export enum ContractType {
             }}>
                 {({isSubmitting}) => (
                     <Form>
-                        <InputField name = 'Driver'placeholder = 'ID'label="Driver" type="number"/>
+                        <InputField name = 'Driver'placeholder = 'ID'label="Personel ID number" type="number"/>
                         <Box mt = {4}>
                             <InputField name = 'duration'placeholder = {new Date().toJSON().slice(0,10)} label="duration" type="date"/>
                         </Box>

@@ -3,14 +3,14 @@ import {withUrqlClient} from 'next-urql';
 import { createUrqlClient } from "../utils/createUrqlClient";
 import { Layout } from "../components/Layout";
 import NextLink from 'next/link';
-import {Box, Flex, Heading, Link, Stack, Text, Button} from '@chakra-ui/react'
+import {Box, Flex, Heading, Link, Stack, Text, Button, HStack} from '@chakra-ui/react'
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { useAllEngineersQuery, useDriversQuery } from "../generated/graphql";
 
 const Index = () => {
     const [{data, fetching}] = useDriversQuery({
         variables:{
-            limit: 5,
+            limit: 20,
             // cursor: 5
         }
     });
@@ -81,7 +81,7 @@ const Index = () => {
                             <Heading fontSize='xl'>{d.Dname}</Heading>
                             <Text mt={4}>Age: {d.Dage}</Text>
                             <Text mt={4}>WDC position: {d.pos}</Text>
-                            <Text mt={4}>ActiveDriver: {d.status === '0'?"InActive":"Active"}</Text>
+                            <Text mt={4}>ActiveDriver: {d.status?"Active":"InActive"}</Text>
                         </Box>
                        </>
                         
@@ -92,6 +92,7 @@ const Index = () => {
                 </Stack> 
                         </>
             )}
+            
             {data ? (
                 <Flex>
                     <Button isLoading = {fetching} m="auto" my={8}>
@@ -99,7 +100,7 @@ const Index = () => {
                     </Button>
                 </Flex>
             ): null}
-
+            
             {!eData && efetching?(
             <>
                 <div>Loading.....</div>
@@ -135,7 +136,7 @@ const Index = () => {
             ): null}
 
             
-            
+           
             
         
         </>

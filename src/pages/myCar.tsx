@@ -149,10 +149,10 @@ interface InputFieldProps {
                     <Heading my={4} size='lg'>Car Mechanics for Car no: {cur}</Heading>
                     
                     {
-                        mData.mechanics.mechanic.length===0?( //mData.mechanics.mechanic ===[] && mFetching
+                         mData.mechanics.mechanic.length===0?( //mData.mechanics.mechanic ===[] && mFetching
                             <> 
-                            {!aData && afetching?(<>
-                                <div>Loading</div>
+                            {aData?.myMechanics.length===0?(<>
+                                <div>No available Mechanics to assign to car no : {cur}</div>
                             </>):(
                                 <>
                                 <Box p={5}
@@ -161,7 +161,7 @@ interface InputFieldProps {
                                flex='1'
                                borderRadius='md' my={4}>
                                 <div>MECHANICS NOT ASSIGNED</div>
-                                <Formik initialValues={{ m_id:aData?.myMechanics[0].mech_id}} onSubmit={ async (values, seterrors) =>{
+                                <Formik initialValues={{ m_id: aData?.myMechanics[0].mech_id}} onSubmit={ async (values, seterrors) =>{
                                     console.log(values);
                                     if(values.m_id){
                                         const id = parseInt(values.m_id.toString())
